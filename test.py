@@ -1,13 +1,11 @@
 import os
-import torch.backends.cudnn as cudnn
+import torch
 import torch.utils.data
-from torch.autograd import Variable
 from torchvision import transforms
 from data_loader import GetLoader
 from torchvision import datasets
 from model_compat import DSN
 import torchvision.utils as vutils
-
 
 def test(epoch, name):
 
@@ -65,7 +63,7 @@ def test(epoch, name):
         )
 
     else:
-        print 'error dataset name'
+        print('error dataset name')
 
     ####################
     # load model       #
@@ -83,13 +81,9 @@ def test(epoch, name):
     # transform image  #
     ####################
 
-
     def tr_image(img):
-
         img_new = (img + 1) / 2
-
         return img_new
-
 
     len_dataloader = len(dataloader)
     data_iter = iter(dataloader)
@@ -100,7 +94,7 @@ def test(epoch, name):
 
     while i < len_dataloader:
 
-        data_input = data_iter.next()
+        data_input = next(data_iter)
         img, label = data_input
 
         batch_size = len(label)
@@ -116,8 +110,8 @@ def test(epoch, name):
 
         input_img.resize_as_(input_img).copy_(img)
         class_label.resize_as_(label).copy_(label)
-        inputv_img = Variable(input_img)
-        classv_label = Variable(class_label)
+        inputv_img = torch.tensor(input_img, requires_grad=True)
+        classv_label = torch.tensor(class_label)
 
         result = my_net(input_data=inputv_img, mode='source', rec_scheme='share')
         pred = result[3].data.max(1, keepdim=True)[1]
@@ -143,4 +137,4 @@ def test(epoch, name):
 
     accu = n_correct * 1.0 / n_total
 
-    print 'epoch: %d, accuracy of the %s dataset: %f' % (epoch, name, accu)
+    print('epoch: %d, accuracy of the %s dataset: %f' % (epoch, name, accu))
