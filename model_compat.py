@@ -1,3 +1,4 @@
+import torch
 import torch.nn as nn
 from functions import ReverseLayerF
 
@@ -8,7 +9,7 @@ class DSN(nn.Module):
         self.code_size = code_size
 
         ##########################################
-        # private source encoder ---- REMOVED
+        # private source encoder
         ##########################################
 
         # self.source_encoder_conv = nn.Sequential()
@@ -64,7 +65,7 @@ class DSN(nn.Module):
         self.shared_encoder_fc.add_module('fc_se3', nn.Linear(in_features=7 * 7 * 48, out_features=code_size))
         self.shared_encoder_fc.add_module('ac_se3', nn.ReLU(True))
 
-        # classify 10 numbers REMOVED
+        # classify 10 numbers
         # self.shared_encoder_pred_class = nn.Sequential()
         # self.shared_encoder_pred_class.add_module('fc_se4', nn.Linear(in_features=code_size, out_features=100))
         # self.shared_encoder_pred_class.add_module('relu_se4', nn.ReLU(True))
@@ -153,8 +154,3 @@ class DSN(nn.Module):
         result.append(rec_code)
 
         return result
-
-
-
-
-
