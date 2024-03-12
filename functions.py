@@ -1,9 +1,7 @@
-from torch.autograd import Function
 import torch.nn as nn
 import torch
 
-
-class ReverseLayerF(Function):
+class ReverseLayerF(nn.Module):
 
     @staticmethod
     def forward(ctx, x, p):
@@ -63,6 +61,3 @@ class DiffLoss(nn.Module):
         diff_loss = torch.mean((input1_l2.t().mm(input2_l2)).pow(2))
 
         return diff_loss
-
-
-
