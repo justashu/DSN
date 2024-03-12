@@ -191,9 +191,9 @@ for epoch in xrange(n_epoch):
         loss.backward()
         optimizer.step()
 
-        ###################################
-        # source data training            #
-        ###################################
+        #############################################
+        # source data training            #  #
+        #############################################
 
         data_source = data_source_iter.next()
         s_img, s_label = data_source
@@ -234,15 +234,15 @@ for epoch in xrange(n_epoch):
             result = my_net(input_data=source_inputv_img, mode='source', rec_scheme='all')
             source_privte_code, source_share_code, _, source_class_label, source_rec_code = result
 
-        source_classification = loss_classification(source_class_label, source_classv_label)
-        loss += source_classification
+        # source_classification = loss_classification(source_class_label, source_classv_label)  ### Classification error
+        # loss += source_classification                                                         ###  REMOVED
 
-        source_diff = beta_weight * loss_diff(source_privte_code, source_share_code)
-        loss += source_diff
-        source_mse = alpha_weight * loss_recon1(source_rec_code, source_inputv_img)
-        loss += source_mse
-        source_simse = alpha_weight * loss_recon2(source_rec_code, source_inputv_img)
-        loss += source_simse
+        # source_diff = beta_weight * loss_diff(source_privte_code, source_share_code)          ### L_difference (Source Enc and Shared Enc) REMOVED
+        # loss += source_diff
+        # source_mse = alpha_weight * loss_recon1(source_rec_code, source_inputv_img) 
+        # loss += source_mse
+        # source_simse = alpha_weight * loss_recon2(source_rec_code, source_inputv_img)
+        # loss += source_simse                                                                  ### L_reconstructin REMOVED
 
         loss.backward()
         optimizer = exp_lr_scheduler(optimizer=optimizer, step=current_step)
