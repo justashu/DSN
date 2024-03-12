@@ -8,23 +8,23 @@ class DSN(nn.Module):
         self.code_size = code_size
 
         ##########################################
-        # private source encoder
+        # private source encoder ---- REMOVED
         ##########################################
 
-        self.source_encoder_conv = nn.Sequential()
-        self.source_encoder_conv.add_module('conv_pse1', nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5,
-                                                                padding=2))
-        self.source_encoder_conv.add_module('ac_pse1', nn.ReLU(True))
-        self.source_encoder_conv.add_module('pool_pse1', nn.MaxPool2d(kernel_size=2, stride=2))
+        # self.source_encoder_conv = nn.Sequential()
+        # self.source_encoder_conv.add_module('conv_pse1', nn.Conv2d(in_channels=3, out_channels=32, kernel_size=5,
+        #                                                         padding=2))
+        # self.source_encoder_conv.add_module('ac_pse1', nn.ReLU(True))
+        # self.source_encoder_conv.add_module('pool_pse1', nn.MaxPool2d(kernel_size=2, stride=2))
 
-        self.source_encoder_conv.add_module('conv_pse2', nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5,
-                                                                padding=2))
-        self.source_encoder_conv.add_module('ac_pse2', nn.ReLU(True))
-        self.source_encoder_conv.add_module('pool_pse2', nn.MaxPool2d(kernel_size=2, stride=2))
+        # self.source_encoder_conv.add_module('conv_pse2', nn.Conv2d(in_channels=32, out_channels=64, kernel_size=5,
+        #                                                         padding=2))
+        # self.source_encoder_conv.add_module('ac_pse2', nn.ReLU(True))
+        # self.source_encoder_conv.add_module('pool_pse2', nn.MaxPool2d(kernel_size=2, stride=2))
 
-        self.source_encoder_fc = nn.Sequential()
-        self.source_encoder_fc.add_module('fc_pse3', nn.Linear(in_features=7 * 7 * 64, out_features=code_size))
-        self.source_encoder_fc.add_module('ac_pse3', nn.ReLU(True))
+        # self.source_encoder_fc = nn.Sequential()
+        # self.source_encoder_fc.add_module('fc_pse3', nn.Linear(in_features=7 * 7 * 64, out_features=code_size))
+        # self.source_encoder_fc.add_module('ac_pse3', nn.ReLU(True))
 
         #########################################
         # private target encoder
@@ -64,15 +64,15 @@ class DSN(nn.Module):
         self.shared_encoder_fc.add_module('fc_se3', nn.Linear(in_features=7 * 7 * 48, out_features=code_size))
         self.shared_encoder_fc.add_module('ac_se3', nn.ReLU(True))
 
-        # classify 10 numbers
-        self.shared_encoder_pred_class = nn.Sequential()
-        self.shared_encoder_pred_class.add_module('fc_se4', nn.Linear(in_features=code_size, out_features=100))
-        self.shared_encoder_pred_class.add_module('relu_se4', nn.ReLU(True))
-        self.shared_encoder_pred_class.add_module('fc_se5', nn.Linear(in_features=100, out_features=n_class))
+        # classify 10 numbers REMOVED
+        # self.shared_encoder_pred_class = nn.Sequential()
+        # self.shared_encoder_pred_class.add_module('fc_se4', nn.Linear(in_features=code_size, out_features=100))
+        # self.shared_encoder_pred_class.add_module('relu_se4', nn.ReLU(True))
+        # self.shared_encoder_pred_class.add_module('fc_se5', nn.Linear(in_features=100, out_features=n_class))
 
-        self.shared_encoder_pred_domain = nn.Sequential()
-        self.shared_encoder_pred_domain.add_module('fc_se6', nn.Linear(in_features=100, out_features=100))
-        self.shared_encoder_pred_domain.add_module('relu_se6', nn.ReLU(True))
+        # self.shared_encoder_pred_domain = nn.Sequential()
+        # self.shared_encoder_pred_domain.add_module('fc_se6', nn.Linear(in_features=100, out_features=100))
+        # self.shared_encoder_pred_domain.add_module('relu_se6', nn.ReLU(True))
 
         # classify two domain
         self.shared_encoder_pred_domain.add_module('fc_se7', nn.Linear(in_features=100, out_features=2))
