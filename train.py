@@ -10,7 +10,9 @@ from model_compat import DSN
 from data_loader import GetLoader
 from functions import SIMSE, DiffLoss, MSE
 from test import test
-
+from torch.utils.data import DataLoader, Dataset
+from torchvision import transforms
+from PIL import Image
 ######################
 # params             #
 ######################
@@ -42,38 +44,42 @@ torch.manual_seed(manual_seed)
 # load data           #
 #######################
 
+
+
+# Define your custom dataset class
+class CustomDataset(Dataset):
+    def __init__(self, data_root, transform=None):
+        self.data_root = data_root
+        self.transform = transform
+        self.images = os.listdir(data_root)
+
+    def __len__(self):
+        return len(self.images)
+
+    def __getitem__(self, idx):
+        img_name = os.path.join(self.data_root, self.images[idx])
+        image = Image.open(img_name) #.convert('RGB')  # Convert to RGB if needed
+
+        if self.transform:
+            image = self.transform(image)
+
+        return image
+
+# Modify the transformation
 img_transform = transforms.Compose([
     transforms.Resize(image_size),
     transforms.ToTensor(),
     transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
 
-dataset_source = datasets.ImageFolder(
-    root=source_image_root,
-    transform=img_transform
-)
+# Use the custom dataset for source and target data
+dataset_source = CustomDataset(data_root=source_image_root, transform=img_transform)
+dataset_target = CustomDataset(data_root=os.path.join(target_image_root, 'leaf_target_train'), transform=img_transform)
 
-dataloader_source = torch.utils.data.DataLoader(
-    dataset=dataset_source,
-    batch_size=batch_size,
-    shuffle=True,
-    num_workers=8
-)
+# Create data loaders
+dataloader_source = DataLoader(dataset_source, batch_size=batch_size, shuffle=True, num_workers=8)
+dataloader_target = DataLoader(dataset_target, batch_size=batch_size, shuffle=True, num_workers=8)
 
-# train_list = os.path.join(target_image_root, 'leaf_target_train_labels.txt')
-
-dataset_target = GetLoader(
-    data_root=os.path.join(target_image_root, 'leaf_target_train'),
-    # data_list=train_list,
-    transform=img_transform
-)
-
-dataloader_target = torch.utils.data.DataLoader(
-    dataset=dataset_target,
-    batch_size=batch_size,
-    shuffle=True,
-    num_workers=8
-)
 
 #####################
 #  load model       #
