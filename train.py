@@ -15,8 +15,8 @@ from test import test
 # params             #
 ######################
 
-source_image_root = os.path.join('.', 'dataset', 'leaf_source')
-target_image_root = os.path.join('.', 'dataset', 'leaf_target')
+source_image_root = os.path.join('.', 'dataset', 'leaf_source', 'train')
+target_image_root = os.path.join('.', 'dataset', 'leaf_target', 'train')
 model_root = 'model'
 cuda = torch.cuda.is_available()
 if cuda:
@@ -60,11 +60,11 @@ dataloader_source = torch.utils.data.DataLoader(
     num_workers=8
 )
 
-train_list = os.path.join(target_image_root, 'leaf_target_train_labels.txt')
+# train_list = os.path.join(target_image_root, 'leaf_target_train_labels.txt')
 
 dataset_target = GetLoader(
     data_root=os.path.join(target_image_root, 'leaf_target_train'),
-    data_list=train_list,
+    # data_list=train_list,
     transform=img_transform
 )
 
@@ -127,8 +127,8 @@ for epoch in range(n_epoch):
         ###################################
 
         data_target = next(data_target_iter)
-        t_img, t_label = data_target
-
+        # t_img, t_label = data_target
+        t_img = data_target
         my_net.zero_grad()
         loss = 0
         batch_size = len(t_label)
@@ -140,7 +140,7 @@ for epoch in range(n_epoch):
 
         if cuda:
             t_img = t_img.cuda()
-            t_label = t_label.cuda()
+            # t_label = t_label.cuda()
             input_img = input_img.cuda()
             class_label = class_label.cuda()
             domain_label = domain_label.cuda()
