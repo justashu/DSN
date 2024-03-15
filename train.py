@@ -131,10 +131,10 @@ for epoch in range(n_epoch):
         t_img = data_target
         my_net.zero_grad()
         loss = 0
-        batch_size = len(t_label)
+        batch_size = len(t_img)
 
         input_img = torch.FloatTensor(batch_size, 3, image_size, image_size)
-        class_label = torch.LongTensor(batch_size)
+        # class_label = torch.LongTensor(batch_size)
         domain_label = torch.ones(batch_size)
         domain_label = domain_label.long()
 
@@ -142,13 +142,13 @@ for epoch in range(n_epoch):
             t_img = t_img.cuda()
             # t_label = t_label.cuda()
             input_img = input_img.cuda()
-            class_label = class_label.cuda()
+            # class_label = class_label.cuda()
             domain_label = domain_label.cuda()
 
         input_img.resize_as_(t_img).copy_(t_img)
-        class_label.resize_as_(t_label).copy_(t_label)
+        # class_label.resize_as_(t_label).copy_(t_label)
         target_inputv_img = torch.tensor(input_img, requires_grad=True)
-        target_classv_label = torch.tensor(class_label)
+        # target_classv_label = torch.tensor(class_label)
         target_domainv_label = torch.tensor(domain_label)
 
         if current_step > active_domain_loss_step:
@@ -180,13 +180,14 @@ for epoch in range(n_epoch):
         ###################################
 
         data_source = next(data_source_iter)
-        s_img, s_label = data_source
+        # s_img, s_label = data_source
+        s_img = data_source
 
         my_net.zero_grad()
-        batch_size = len(s_label)
+        batch_size = len(s_img)
 
         input_img = torch.FloatTensor(batch_size, 3, image_size, image_size)
-        class_label = torch.LongTensor(batch_size)
+        # class_label = torch.LongTensor(batch_size)
         domain_label = torch.zeros(batch_size)
         domain_label = domain_label.long()
 
@@ -196,13 +197,13 @@ for epoch in range(n_epoch):
             s_img = s_img.cuda()
             s_label = s_label.cuda()
             input_img = input_img.cuda()
-            class_label = class_label.cuda()
+            # class_label = class_label.cuda()
             domain_label = domain_label.cuda()
 
         input_img.resize_as_(input_img).copy_(s_img)
-        class_label.resize_as_(s_label).copy_(s_label)
+        # class_label.resize_as_(s_label).copy_(s_label)
         source_inputv_img = torch.tensor(input_img, requires_grad=True)
-        source_classv_label = torch.tensor(class_label)
+        # source_classv_label = torch.tensor(class_label)
         source_domainv_label = torch.tensor(domain_label)
 
         if current_step > active_domain_loss_step:
