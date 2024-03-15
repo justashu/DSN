@@ -74,7 +74,7 @@ img_transform = transforms.Compose([
 
 # Use the custom dataset for source and target data
 dataset_source = CustomDataset(data_root=source_image_root, transform=img_transform)
-dataset_target = CustomDataset(data_root=os.path.join(target_image_root, 'leaf_target_train'), transform=img_transform)
+dataset_target = CustomDataset(data_root=target_image_root, transform=img_transform)
 
 # Create data loaders
 dataloader_source = DataLoader(dataset_source, batch_size=batch_size, shuffle=True, num_workers=8)

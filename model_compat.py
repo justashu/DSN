@@ -71,9 +71,9 @@ class DSN(nn.Module):
         # self.shared_encoder_pred_class.add_module('relu_se4', nn.ReLU(True))
         # self.shared_encoder_pred_class.add_module('fc_se5', nn.Linear(in_features=100, out_features=n_class))
 
-        # self.shared_encoder_pred_domain = nn.Sequential()
-        # self.shared_encoder_pred_domain.add_module('fc_se6', nn.Linear(in_features=100, out_features=100))
-        # self.shared_encoder_pred_domain.add_module('relu_se6', nn.ReLU(True))
+        self.shared_encoder_pred_domain = nn.Sequential()
+        self.shared_encoder_pred_domain.add_module('fc_se6', nn.Linear(in_features=100, out_features=100))
+        self.shared_encoder_pred_domain.add_module('relu_se6', nn.ReLU(True))
 
         # classify two domain
         self.shared_encoder_pred_domain.add_module('fc_se7', nn.Linear(in_features=100, out_features=2))
