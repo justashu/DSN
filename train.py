@@ -50,7 +50,6 @@ img_transform = transforms.Compose([
 
 dataset_source = datasets.ImageFolder(
     root=source_image_root,
-    train=True,
     transform=img_transform
 )
 
