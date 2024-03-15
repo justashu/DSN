@@ -22,7 +22,8 @@ target_image_root = os.path.join('.', 'dataset', 'leaf_target', 'train')
 model_root = 'model'
 cuda = torch.cuda.is_available()
 if cuda:
-    cudnn.benchmark = True
+    torch.backends.cudnn.benchmark = True
+
 lr = 1e-2
 batch_size = 32
 image_size = 28
@@ -153,9 +154,9 @@ for epoch in range(n_epoch):
 
         input_img.resize_as_(t_img).copy_(t_img)
         # class_label.resize_as_(t_label).copy_(t_label)
-        target_inputv_img = torch.tensor(input_img, requires_grad=True)
+        target_inputv_img = input_img.clone().detach().requires_grad_(True)
         # target_classv_label = torch.tensor(class_label)
-        target_domainv_label = torch.tensor(domain_label)
+        target_domainv_label = domain_label.clone().detach()
 
         if current_step > active_domain_loss_step:
             p = float(i + (epoch - dann_epoch) * len_dataloader / (n_epoch - dann_epoch) / len_dataloader)
