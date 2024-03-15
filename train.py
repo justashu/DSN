@@ -15,8 +15,8 @@ from test import test
 # params             #
 ######################
 
-source_image_root = os.path.join('.', 'dataset', 'mnist')
-target_image_root = os.path.join('.', 'dataset', 'mnist_m')
+source_image_root = os.path.join('.', 'dataset', 'leaf_source')
+target_image_root = os.path.join('.', 'dataset', 'leaf_target')
 model_root = 'model'
 cuda = torch.cuda.is_available()
 if cuda:
@@ -48,7 +48,7 @@ img_transform = transforms.Compose([
     transforms.Normalize(mean=(0.5, 0.5, 0.5), std=(0.5, 0.5, 0.5))
 ])
 
-dataset_source = datasets.MNIST(
+dataset_source = datasets.ImageFolder(
     root=source_image_root,
     train=True,
     transform=img_transform
@@ -61,10 +61,10 @@ dataloader_source = torch.utils.data.DataLoader(
     num_workers=8
 )
 
-train_list = os.path.join(target_image_root, 'mnist_m_train_labels.txt')
+train_list = os.path.join(target_image_root, 'leaf_target_train_labels.txt')
 
 dataset_target = GetLoader(
-    data_root=os.path.join(target_image_root, 'mnist_m_train'),
+    data_root=os.path.join(target_image_root, 'leaf_target_train'),
     data_list=train_list,
     transform=img_transform
 )
