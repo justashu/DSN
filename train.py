@@ -26,7 +26,7 @@ if cuda:
 
 lr = 1e-2
 batch_size = 32
-image_size = 28
+image_size = [128, 256] # height, width
 n_epoch = 100
 step_decay_weight = 0.95
 lr_decay_step = 20000
@@ -140,7 +140,7 @@ for epoch in range(n_epoch):
         loss = 0
         batch_size = len(t_img)
 
-        input_img = torch.FloatTensor(batch_size, 3, image_size, image_size)
+        input_img = torch.FloatTensor(batch_size, 3, image_size[0], image_size[1])
         # class_label = torch.LongTensor(batch_size)
         domain_label = torch.ones(batch_size)
         domain_label = domain_label.long()
@@ -193,7 +193,7 @@ for epoch in range(n_epoch):
         my_net.zero_grad()
         batch_size = len(s_img)
 
-        input_img = torch.FloatTensor(batch_size, 3, image_size, image_size)
+        input_img = torch.FloatTensor(batch_size, 3, image_size[0], image_size[1])
         # class_label = torch.LongTensor(batch_size)
         domain_label = torch.zeros(batch_size)
         domain_label = domain_label.long()
