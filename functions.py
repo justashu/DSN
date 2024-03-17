@@ -1,7 +1,9 @@
+from torch.autograd import Function
 import torch.nn as nn
 import torch
 
-class ReverseLayerF(nn.Module):
+
+class ReverseLayerF(Function):
 
     @staticmethod
     def forward(ctx, x, p):
@@ -14,6 +16,7 @@ class ReverseLayerF(nn.Module):
         output = grad_output.neg() * ctx.p
 
         return output, None
+
 
 
 class MSE(nn.Module):
