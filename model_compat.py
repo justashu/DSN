@@ -75,7 +75,6 @@ class DSN(nn.Module):
         )
 
         
-        
         ######################################
         # shared decoder (small decoder)
         ######################################
@@ -119,9 +118,9 @@ class DSN(nn.Module):
         domain_label = self.shared_encoder_pred_domain(reversed_shared_code)
         result.append(domain_label)
 
-        if mode == 'source':
-            class_label = self.shared_encoder_pred_class(shared_code)
-            result.append(class_label)
+        # if mode == 'source':
+        #     class_label = self.shared_encoder_pred_class(shared_code)
+        #     result.append(class_label)
 
         if rec_scheme == 'share':
             union_code = shared_code
