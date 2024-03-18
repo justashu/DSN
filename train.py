@@ -59,7 +59,7 @@ class CustomDataset(Dataset):
 
     def __getitem__(self, idx):
         img_name = os.path.join(self.data_root, self.images[idx])
-        image = Image.open(img_name) #.convert('RGB')  # Convert to RGB if needed
+        image = Image.open(img_name).convert('RGB')  # Convert to RGB if needed
 
         if self.transform:
             image = self.transform(image)
@@ -139,7 +139,7 @@ for epoch in range(n_epoch):
         my_net.zero_grad()
         loss = 0
         batch_size = len(t_img)
-
+        # print(t_img[0].shape)
         input_img = torch.FloatTensor(batch_size, 3, image_size[0], image_size[1])
         # class_label = torch.LongTensor(batch_size)
         domain_label = torch.ones(batch_size)
@@ -202,7 +202,7 @@ for epoch in range(n_epoch):
 
         if cuda:
             s_img = s_img.cuda()
-            s_label = s_label.cuda()
+            # s_label = s_label.cuda()
             input_img = input_img.cuda()
             # class_label = class_label.cuda()
             domain_label = domain_label.cuda()
@@ -221,10 +221,14 @@ for epoch in range(n_epoch):
             source_privte_code, source_share_code, source_domain_label, source_class_label, source_rec_code = result
             source_dann = gamma_weight * loss_similarity(source_domain_label, source_domainv_label)
             loss += source_dann
-        else:
-            source_dann = torch.zeros(1).float().cuda()
-            result = my_net(input_data=source_inputv_img, mode='source', rec_scheme='all')
-            source_privte_code, source_share_code, _, source_class_label, source_rec_code = result
+
+            loss.backward()
+            scheduler.step()
+            optimizer.step()
+        # else:
+        #     source_dann = torch.zeros(1).float().cuda()
+        #     result = my_net(input_data=source_inputv_img, mode='source', rec_scheme='all')
+        #     source_privte_code, source_share_code, _, source_class_label, source_rec_code = result
 
         # source_classification = loss_classification(source_class_label, source_classv_label)
         # loss += source_classification
@@ -236,17 +240,17 @@ for epoch in range(n_epoch):
         # source_simse = alpha_weight * loss_recon2(source_rec_code, source_inputv_img)
         # loss += source_simse
 
-        loss.backward()
+        # loss.backward()
         scheduler.step()
-        optimizer.step()
+        # optimizer.step()
 
         i += 1
         current_step += 1
-    print('source_classification: %f, source_dann: %f, source_diff: %f, ' \
-          'source_mse: %f, source_simse: %f, target_dann: %f, target_diff: %f, ' \
+    print(
+          'target_dann: %f, target_diff: %f, ' \
           'target_mse: %f, target_simse: %f' \
-          % (source_classification.detach().cpu().numpy(), source_dann.detach().cpu().numpy(), source_diff.detach().cpu().numpy(),
-             source_mse.detach().cpu().numpy(), source_simse.detach().cpu().numpy(), target_dann.detach().cpu().numpy(),
+          % (
+             target_dann.detach().cpu().numpy(),
              target_diff.detach().cpu().numpy(),target_mse.detach().cpu().numpy(), target_simse.detach().cpu().numpy()))
 
     # print 'step: %d, loss: %f' % (current_step, loss.cpu().data.numpy())

@@ -13,7 +13,7 @@ def test(epoch, name):
     # params          #
     ###################
     cuda = True
-    cudnn.benchmark = True
+    torch.backends.cudnn.benchmark = True
     batch_size = 64
     image_size = 28
 

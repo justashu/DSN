@@ -80,7 +80,7 @@ class DSN(nn.Module):
         ######################################
 
         self.shared_decoder_fc = nn.Sequential(
-            nn.Linear(in_features=code_size, out_features=588),
+            nn.Linear(in_features=code_size, out_features=3 * 64 * 128),
             nn.ReLU(True)
         )
 
@@ -113,7 +113,7 @@ class DSN(nn.Module):
         shared_feat = shared_feat.view(-1, 64 * 32 * 48)
         shared_code = self.shared_encoder_fc(shared_feat)
         result.append(shared_code)
-
+        # print(shared_code.shape)
         reversed_shared_code = ReverseLayerF.apply(shared_code, p)
         domain_label = self.shared_encoder_pred_domain(reversed_shared_code)
         result.append(domain_label)
@@ -130,7 +130,7 @@ class DSN(nn.Module):
             union_code = private_code
 
         rec_vec = self.shared_decoder_fc(union_code)
-        rec_vec = rec_vec.view(-1, 3, 128, 64)
+        rec_vec = rec_vec.view(-1, 3, 64, 128)
         rec_code = self.shared_decoder_conv(rec_vec)
         result.append(rec_code)
 
